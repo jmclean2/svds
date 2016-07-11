@@ -79,7 +79,11 @@ class Message_Class(object):
                 messageUserID = mess.slack_number
 
                 slackUserID = slack_user.query.filter(slack_user.slack_number == messageUserID).all()
-                userName = slackUserID[0].first_name + " " + slackUserID[0].last_name
+                #Accounts for bug that occurs due to bot that posts to trains channel
+                if len(slackUserID) == 0:
+                    userName = 'BOT'
+                else:
+                    userName = slackUserID[0].first_name + " " + slackUserID[0].last_name
 
                 if(userName in messagedUsers):
                     del(messagedUsers[userName])

@@ -3,15 +3,14 @@ from datetime import datetime
 from slacker import Slacker
 from app import db, slackconnect
 from app.model import message_channel
-
-from flask import Flask
+import collections
 
 
 class Channel(object):
     def __init__(self):
        self.channelInfo = []
        self.table = message_channel
-       self.allChannels = {}
+       self.allChannels = collections.OrderedDict()
        self.reverseChannelLookup = {}
 
     #Retrives all of the channel information

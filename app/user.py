@@ -3,6 +3,7 @@ from flask import Flask
 from app.model import slack_user
 from app import app, db, slackconnect
 from flask_sqlalchemy import SQLAlchemy
+import collections, sys
 
 
 class User(object):
@@ -10,7 +11,7 @@ class User(object):
         self.userInfo = []
         self.table = slack_user
         self.allUsers = []
-        self.names ={}
+        self.names = collections.OrderedDict()
 
     #retrives user information through slack web-api call
     def getUserInformation(self):
@@ -32,7 +33,6 @@ class User(object):
 
     #pushes all of the users to a database
     def sendUsersToDatabase(self, populate):
-        
         for user in self.userInfo:
             userNum = user[0]
             userFirst = user[1]
@@ -57,4 +57,5 @@ class User(object):
             
             # added .title() after name to capitalize the first letter of fn and ln
             self.names[name] = userID
+
         return self.names
