@@ -1,0 +1,12 @@
+#
+####### requirements.txt #######
+#
+###### Requirements without Version Specifiers ######
+flask
+slacker
+flask_sqlalchemy
+wtforms
+flask_wtf
+flask_bootstrap
+pymysql
+mysql

@@ -27,8 +27,11 @@ class Message_Class(object):
                 user = ""
             timestamp = float(message["ts"])
             timestamp = int(timestamp)
-            messageInfo = [user,text,timestamp,channel]
-            messageLogInfo.append(messageInfo)
+            if text is None:
+                pass
+            else:
+                messageInfo = [user,text,timestamp,channel]
+                messageLogInfo.append(messageInfo)
         return messageLogInfo
 
     #pushes the messages to the database
