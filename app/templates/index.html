@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  body{background-image: url(slack.png);}
+  h3 {color:grey;}
+  #rows {
+  	opacity: 0.85;
+  .modal-backdrop.in { z-index: -1;}
+  }
+  table{
+  	table-layout: fixed;
+  	word-wrap: break-word;
+  }
+</style>
+
+<div class="container-fluid">
+	<div id="rows" class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<form action="" method="post" >
+    			{{form.hidden_tag()}}
+					<div class="col-md-4">
+						<div class="btn-group">
+							
+							{{form.dt(class="dtpick")}}
+						
+							{{form.userChoice()}}
+				
+						
+							{{form.channelChoice()}}
+						
+
+						</div>
+						<button type="submit" class="btn btn-default">
+							Submit
+						</button>  
+					</div>
+				</form>
+
+
+			<center><table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th width="22%">User</th>
+						<th width="20%">Channel</th>
+						<th width="13%">Time</th>
+						<th width="45%">Message</th>
+					</tr>
+				</thead>
+				{% set count = 0 %}
+				{% for key in messageInfo.keys() %}
+				{% set count = count + 1 %}
+				<tbody>
+					<tr>
+						<td width ="22%">{{ messageInfo[key][3]}}</td>
+						<td width ="20%">{{ messageInfo[key][1]}}</td>
+						<td width ="13%">{{ messageInfo[key][2]}}</td>
+						<td width ="45%">{{ messageInfo[key][0]}} 
+						{% for i in range (4, messageInfo[key]|length) if user !='None' %}
+							</td> </tr> 
+							<tbody>
+								<tr>
+									<td>{{ messageInfo[key][i][3] }}</td>
+									<td>{{ messageInfo[key][i][1] }}</td>
+									<td>{{ messageInfo[key][i][2] }}</td>
+									<td>{{ messageInfo[key][i][0] }} </td>
+								</tr>
+							</tbody>
+						{%endfor%} 
+							{% if messageInfo[key]|length > 4 and user == 'None'%}
+
+							<!-- Trigger the modal with a button -->
+ 								<div align="right"><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal{{count|string}}">All Messages</button></div>
+  							
+
+								<div class="container">
+									<!-- Modal -->
+									<div class="modal fade" id="myModal{{count|string}}" role="dialog" data-backdrop ="false">
+										<div class="modal-dialog" id = "{{count|string}}">
+
+
+									 	 <!-- Modal content-->
+									  		<div class="modal-content">
+									    		<div class="modal-header">
+									    		All Messages
+									      			<button type="button" class="close" data-dismiss="modal">&times;</button>
+									      			<h4 class="modal-title">{{userName}}</h4>
+									    		</div>
+									   			<div class="modal-body">
+									   				<table class="table table-striped" id="yes">
+											            <thead id="yes">
+											              <tr>
+											                <th>Channel</th>
+											                <th>Time</th>
+											                <th>Message</th>
+											              </tr>
+											            </thead>
+											            <tbody>
+											      			{% for i in range (4, messageInfo[key]|length) %}
+																
+																	<tr>
+																		<td>{{ messageInfo[key][i][1] }}</td>
+																		<td>{{ messageInfo[key][i][2] }}</td>
+																		<td>{{ messageInfo[key][i][0] }} </td>
+																	</tr>
+												   			{%endfor%}
+														</tbody>
+													</table>
+									    		</div>
+									    		<div class="modal-footer">
+									      			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									    		</div>
+
+									  		</div> 
+										</div>
+									</div>
+								</div>
+
+								</td>
+							</tr>
+							{% endif %}
+					<!--</tbody>
+				</table> -->
+						
+						
+				{% endfor %}
+			</center></table>
+
+		</div>
+	</div>
+</div>
+</tbody>
+
+{% endblock %}

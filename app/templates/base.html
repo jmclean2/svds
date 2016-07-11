@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <style>
+    body{color: lightgrey;}
+    h3 {color:grey;}
+    #header {
+    opacity: 0.8;
+  }
+  </style>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    
+    <script>
+        $(function() {
+          $( ".dtpick" ).datepicker({ minDate: (new Date(16,6,13)), maxDate: "+0D" });
+        });
+    </script>
+
+    <title>Slack Daily Report</title>
+
+  </head>
+  <body>
+    <div class="container-fluid">
+     <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+            <img src="http://uploads.webflow.com/54d006aa2cb8e4a17a02e212/5522ca29dcc6adcc03851661_SVDS_logo_color_Aug_16_2013.png" widdth="125" height="125">
+          </div>
+        </div>
+        <h3>
+          Slack Daily Report
+        </h3>
+      </div>
+    </div>
+  {% block content %}{% endblock %}
+
+  </body>
+</html>

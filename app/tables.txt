@@ -1,0 +1,29 @@
+CREATE TABLE `message` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `date_time` int(11) DEFAULT NULL,
+  `msg` varchar(2000) DEFAULT NULL,
+  `slack_number` varchar(50) DEFAULT NULL,
+  `channel_number` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ix_message_channel_number` (`channel_number`),
+  KEY `ix_message_slack_number` (`slack_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `message_channel` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `channel_number` varchar(50) DEFAULT NULL,
+  `channel_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ix_message_channel_channel_number` (`channel_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `slack_user` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `slack_number` varchar(50) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ix_slack_user_slack_number` (`slack_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+
+
