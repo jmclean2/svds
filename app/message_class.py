@@ -5,27 +5,39 @@ from datetime import timedelta
 from app.model import message, slack_user
 from flask import Flask, Request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 import collections, sys
 
 class Message_Class(object):
     def __init__(self):
         self.ListOfMessages = []
-   
+
     #Gets messages from Slack from since last timestamp
     def getMessageInfo(self,channel, date):
-        
-        responseObject = slackconnect.channels.history(channel, oldest = date)
+        responseObject = slackconnect.channels.history(channel, oldest = date, inclusive = 0)
         responseDict = responseObject.body["messages"]
-
+        print(responseDict)
         messageLogInfo = []
-        for i in responseDict[0:len(responseDict)-1]:
-            message = i
-            text = message["text"]
-            if "user" in message:
-                user = message["user"]
+        #duplicate messages
+        latestMessage = message.query.order_by(desc(message.date_time)).first()
+        loopLength = len(responseDict)
+        if latestMessage != None and loopLength >0 and latestMessage.msg == responseDict[loopLength-1]["text"]:
+            print ("LATEST MESSAGE")
+            print(latestMessage.msg)
+            #there is a repeat message so adjust
+            loopLength -=1
+        for i in responseDict[0:loopLength]:
+            print("entered")
+            print(i)
+
+            mess = i
+            text = mess["text"]
+            text = self.textConverter(text)
+            if "user" in mess:
+                user = mess["user"]
             else:
                 user = ""
-            timestamp = float(message["ts"])
+            timestamp = float(mess["ts"])
             timestamp = int(timestamp)
             if text is None:
                 pass
@@ -41,6 +53,7 @@ class Message_Class(object):
             text = mess[1]
             date = mess[2]
             channelNum = mess[3]
+
 
             new_message = message(date, text, userNum, channelNum)
             db.session.merge(new_message)
@@ -88,34 +101,62 @@ class Message_Class(object):
                 if(userName in messagedUsers):
                     del(messagedUsers[userName])
 
-        #Query the message_channel table to find the channel name
+                #Query the message_channel table to find the channel name
                 channelName = channelIDNumber[channelNum]
                 messageDate = self.datetimeChange(messageDate, True)
               
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
-                #print("uxers  " + str(individualMessage), file=sys.stderr)
                 
                 if userName in messageStack.keys():
-                    #item = messageStack[userName] + individualMessage
                     messageStack[userName].append(individualMessage)
-                    #messageStack.update({userName : item}) 
+
                 else:
                     messageStack[userName] = individualMessage
-               # print(' THis is the message stack ' + str(messageStack), file=sys.stderr)
-            #Checking if the selection for users was 'all' and adding thoose who never commented 
-            #in that channel for the day
             if (user == 'None'):
                 for theUser in messagedUsers:
                      individualMessage = [" ", channel, " ", theUser]
                      messageStack[theUser] = individualMessage
-            #dictionary with first and other
-            #first holds an array with all the info, other holds an array of arrays with all the info
-                #if already entered into database then add to an array of arrays for other messages 
             else: pass
-            #messageStack = messageStack.sort()
             
             return messageStack
+
+    #modifies text to display actual hyperlinks, usernames and channels 
+    def textConverter(self, text):
+        i = 0;
+        revisedText = text
+        if text is not None and len(text) >9:
+
+            while i < len(revisedText) -8:
+                string = revisedText[i]+revisedText[i+1]
+                if string == '<@' and revisedText[i+11] == '>':
+                    username = revisedText[i+2:i+11]
+                    user = slack_user.query.filter(slack_user.slack_number == username).all()
+                    if len(user) != 0:
+                        name = user[0].first_name + " " + user[0].last_name
+                        userNamelength = len(name)
+                        #adds space to end of comment to get around bug
+                        #revisedText = revisedText + " "
+                        revisedText = revisedText[:i] + name + revisedText[i+12:]
+                        i = i + 1 + userNamelength -1
+                    else:
+                        i+=1
+                elif string == '<#' and revisedText[i+11] == '>':
+                    channelID = revisedText[i+2:i+11]
+                    channel = message_channel.query.filter(message_channel.channel_number == channelID).all()
+                    if len(user) != 0:
+                        channelName = channel[0].channel_name
+                        channelNamelength = len(channelName)
+                        #adds space to end of comment to get around bug
+                        #revisedText = revisedText + " "
+                        revisedText = revisedText[:i] + channelName + revisedText[i+12:]
+                        i = i + 1 + channelNamelength -1
+                    else:
+                        i+=1
+                else:
+                    i+=1
+        return revisedText
+
 
     #converts timestamp to datetime
     def datetimeChange(self, timestamp, seconds):

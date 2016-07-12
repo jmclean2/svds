@@ -41,52 +41,9 @@ class Select2TagForm(Form):
     dt = DateField('Pick a Date', format="%m/%d/%Y")
 
 
-# #Updates tables that need to be updated before loading a page
-# def before_Pageload():
-#     #Initilizing chanel, user and message objects
-#     cha = Channel()
-#     usa = User()
-#     msg = Message_Class() 
-#     #Calling slack api for new information
-#     channels = cha.getChannelInfo()
-#     users = usa.getUserInformation()
-
-#     #Querying the database for all users
-#     userQuery = slack_user.query.all()
-#     #Comparing information from slack and query from databse, to see if an update is needed
-#     if (len(userQuery) < len(users)) :
-#         #Insert users in the user table
-#         usa.sendUsersToDatabase(False) 
-#     #Querying the database for all channels
-#     channelQuery = message_channel.query.all()
-#     #Comparing information from slack and query from databse, to see if an update is needed
-#     if (len(channelQuery) < len(channels)) :
-#         # Insert channels in the channel table
-#         cha.sendChannelsToDatabase(False) 
-    
-#     #Querying the message table for the last date time a message was posted
-#     lastMessageTimestamp = message.query.order_by(desc(('date_time'))).first()
-#     if lastMessageTimestamp == None:
-#         #convert date to a timestamp
-#         dateTimeToday = date.today()
-#         lastMessageTimestamp =  dateTimeToday.strftime('%s')
-#         lastMessageTimestamp = int(lastMessageTimestamp)
-#     else:
-#         lastMessageTimestamp = lastMessageTimestamp.date_time
-#     #Get messageObjects from slack and send them to the database
-#     for channelIdNumber in channelQuery:
-#         slackMessages = msg.getMessageInfo(channelIdNumber.channel_number, lastMessageTimestamp)
-#         #Insert messages in the the message table
-
-#         if(slackMessages != None):
-#             msg.sendMessagesToDatabase(slackMessages)
-#     #Commit the inserts
-#     db.session.commit() 
-
-
 #Returns the selection choices for date, time and user and handles no entry
 def loadChoices(form):
-    #before_Pageload()
+    
     #Checking if no date entered, Display current date as default
     if (form.dt.data != None):
         theDate = form.dt.data.strftime('%s') 

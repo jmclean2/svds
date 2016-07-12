@@ -7,7 +7,6 @@ import sys
 
 #user table
 class slack_user(db.Model):
-    #include the line: __tablename__ = 'slack_user'  ????
     # define columns for the table person
     ID = db.Column(db.Integer, primary_key=True)
     slack_number = db.Column(db.String(50), index=True, unique=True)
@@ -54,6 +53,3 @@ class message(db.Model):
     def __repr__(self):
         return '<message %r>' % self.ID
 db.create_all()
-
-# notes for MAC OSX
-#TRUE was changed from NONE in /Users/<USER>/anaconda/lib/python3.5/site-packages/flask_sqlalchemy/__init__.py
