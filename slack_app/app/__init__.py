@@ -7,7 +7,7 @@ from slacker import Slacker
 from flask_bootstrap import Bootstrap
 
 dir = os.path.dirname(__file__)
-config_file_name = os.path.join(dir, '../config/config_file.cfg')
+config_file_name = os.path.join(dir, '../../config/config_file.cfg')
 
 app = Flask(__name__, instance_path=config_file_name)
 #app.config.from_object('config')

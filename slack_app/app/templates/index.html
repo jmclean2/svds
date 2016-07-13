@@ -2,7 +2,6 @@
 
 {% block content %}
 <style>
-  body{background-image: url(slack.png);}
   h3 {color:grey;}
   #rows {
   	opacity: 0.85;
@@ -23,12 +22,12 @@
 					<div class="col-md-4">
 						<div class="btn-group">
 							
-							{{form.dt(class="dtpick")}}
+							<p>Date: {{form.dt(class="dtpick")}}</p>
 						
-							{{form.userChoice()}}
+							<p>User: {{form.userChoice()}}</p>
 				
 						
-							{{form.channelChoice()}}
+							<p>Channel: {{form.channelChoice()}}</p>
 						
 
 						</div>

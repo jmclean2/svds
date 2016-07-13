@@ -54,7 +54,8 @@ class User(object):
             name = ""
             if (userFirst != None and userLast != None):
                 name = userFirst + " " + userLast
-            
+            else:
+                print (userFirst + userlast)
             # added .title() after name to capitalize the first letter of fn and ln
             self.names[name] = userID
 

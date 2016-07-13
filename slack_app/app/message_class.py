@@ -16,20 +16,15 @@ class Message_Class(object):
     def getMessageInfo(self,channel, date):
         responseObject = slackconnect.channels.history(channel, oldest = date, inclusive = 0)
         responseDict = responseObject.body["messages"]
-        print(responseDict)
         messageLogInfo = []
         #duplicate messages
         latestMessage = message.query.order_by(desc(message.date_time)).first()
         loopLength = len(responseDict)
         if latestMessage != None and loopLength >0 and latestMessage.msg == responseDict[loopLength-1]["text"]:
-            print ("LATEST MESSAGE")
-            print(latestMessage.msg)
-            #there is a repeat message so adjust
+            #there is a repeat message so get rid of extra entry
             loopLength -=1
-        for i in responseDict[0:loopLength]:
-            print("entered")
-            print(i)
 
+        for i in responseDict[0:loopLength]:
             mess = i
             text = mess["text"]
             text = self.textConverter(text)
@@ -95,6 +90,7 @@ class Message_Class(object):
                 #Accounts for bug that occurs due to bot that posts to trains channel
                 if len(slackUserID) == 0:
                     userName = 'BOT'
+
                 else:
                     userName = slackUserID[0].first_name + " " + slackUserID[0].last_name
 
@@ -107,8 +103,9 @@ class Message_Class(object):
               
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
-                
-                if userName in messageStack.keys():
+                if (userName == ""):
+                    pass
+                elif userName in messageStack.keys():
                     messageStack[userName].append(individualMessage)
 
                 else:
@@ -118,10 +115,13 @@ class Message_Class(object):
                      individualMessage = [" ", channel, " ", theUser]
                      messageStack[theUser] = individualMessage
             else: pass
-            
-            return messageStack
 
-    #modifies text to display actual hyperlinks, usernames and channels 
+            #Entries are displayed in alphabetical order
+            alphabeticalDict = collections.OrderedDict(sorted(messageStack.items(), key=lambda t: t[0]))
+
+            return alphabeticalDict
+
+    #modifies text to display actual usernames and channels instead of ids
     def textConverter(self, text):
         i = 0;
         revisedText = text
