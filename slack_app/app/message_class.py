@@ -133,8 +133,6 @@ class Message_Class(object):
                     if len(user) != 0:
                         name = user[0].first_name + " " + user[0].last_name
                         userNamelength = len(name)
-                        #adds space to end of comment to get around bug
-                        #revisedText = revisedText + " "
                         revisedText = revisedText[:i] + name + revisedText[i+12:]
                         i = i + 1 + userNamelength -1
                     else:
@@ -144,9 +142,7 @@ class Message_Class(object):
                     channel = message_channel.query.filter(message_channel.channel_number == channelID).all()
                     if len(user) != 0:
                         channelName = channel[0].channel_name
-                        channelNamelength = len(channelName)
-                        #adds space to end of comment to get around bug
-                        #revisedText = revisedText + " "
+                        channelNamelength = len(channelName)                        
                         revisedText = revisedText[:i] + channelName + revisedText[i+12:]
                         i = i + 1 + channelNamelength -1
                     else:
