@@ -2,7 +2,7 @@ from datetime import datetime
 from slacker import Slacker
 from app import db, slackconnect
 from datetime import timedelta
-from app.model import message, slack_user
+from app.model import message, slack_user, message_channel
 from flask import Flask, Request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
