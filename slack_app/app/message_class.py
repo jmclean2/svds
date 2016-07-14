@@ -103,9 +103,7 @@ class Message_Class(object):
               
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
-                if (userName == ""):
-                    pass
-                elif userName in messageStack.keys():
+                if userName in messageStack.keys():
                     messageStack[userName].append(individualMessage)
 
                 else:
